@@ -52,7 +52,7 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release \
             -DANDROID=ON \
             -DMUPENPLUSAPI=1
-            ../../src/
+            src/
 
       - name: Compiled-gamelibs-${{ matrix.arch.name }}
         run: |
@@ -65,4 +65,4 @@ jobs:
         with:
           name: android-${{ matrix.arch.abi }}-artifacts
           path: |
-            build/android-${{ matrix.arch.abi }}/plugin/Release/*.so
+            build-${{ matrix.arch.abi }}/android-${{ matrix.arch.abi }}/plugin/Release/*.so
