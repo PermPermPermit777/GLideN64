@@ -61,8 +61,12 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release \
             -DANDROID=ON \
             -DMUPENPLUSAPI=1
-            ../../src/
-            
+            ..
+
+      - name: Compiled-gamelibs-${{ matrix.arch.name }}
+        run: |
+          ninja -j$(nproc)
+
       - name: uploading artifact ${{ matrix.arch.name }}
         if: success()
         uses: actions/upload-artifact@v7.0.1
