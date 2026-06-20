@@ -56,7 +56,7 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release \
             -DANDROID=ON \
             -DMUPENPLUSAPI=1
-            ../../src/
+            ../../../src/
 
       - name: Compiled-gamelibs-${{ matrix.arch.name }}
         run: |
