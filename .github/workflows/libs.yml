@@ -41,18 +41,9 @@ jobs:
           ndk-version: r29
           add-to-path: false
 
-      - name: setting up cmake
-        uses: jwlawson/actions-setup-cmake@v2.2.0
-        with:
-          cmake-version: '4.3.2'
-          
-      - name: make build directory
-        run: mkdir -p build-${{ matrix.arch.abi }}
-
       - name: configures cmake for ${{ matrix.arch.name }}
         run: |
-          cd build-${{ matrix.arch.abi }}
-          cmake -G "Ninja" \
+          cmake -G "Ninja" -B build-${{ matrix.arch.abi }} \
             -DCMAKE_TOOLCHAIN_FILE=${{ steps.setup-ndk.outputs.ndk-path }}/build/cmake/android.toolchain.cmake \
             -DANDROID_ABI=${{ matrix.arch.android_abi }} \
             -DANDROID_NDK=${{ steps.setup-ndk.outputs.ndk-path }} \
@@ -61,10 +52,11 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release \
             -DANDROID=ON \
             -DMUPENPLUSAPI=1
-            ..
+            ../../src/
 
       - name: Compiled-gamelibs-${{ matrix.arch.name }}
         run: |
+          cd build-${{ matrix.arch.abi }}
           ninja -j$(nproc)
 
       - name: uploading artifact ${{ matrix.arch.name }}
