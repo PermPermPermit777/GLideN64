@@ -40,10 +40,14 @@ jobs:
         with:
           ndk-version: r29
           add-to-path: false
-
+      - name: folder-gamelibs-${{ matrix.arch.name }}
+        run: |
+          mkdir -p build-${{ matrix.arch.abi }}/android-${{ matrix.arch.abi }}
+  
       - name: configures cmake for ${{ matrix.arch.name }}
         run: |
-          cmake -G "Ninja" -B build-${{ matrix.arch.abi }} \
+          cd build-${{ matrix.arch.abi }}/android-${{ matrix.arch.abi }}
+          cmake -G "Ninja" \
             -DCMAKE_TOOLCHAIN_FILE=${{ steps.setup-ndk.outputs.ndk-path }}/build/cmake/android.toolchain.cmake \
             -DANDROID_ABI=${{ matrix.arch.android_abi }} \
             -DANDROID_NDK=${{ steps.setup-ndk.outputs.ndk-path }} \
@@ -52,11 +56,10 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release \
             -DANDROID=ON \
             -DMUPENPLUSAPI=1
-            src/
+            ../../src/
 
       - name: Compiled-gamelibs-${{ matrix.arch.name }}
         run: |
-          cd build-${{ matrix.arch.abi }}
           ninja -j$(nproc)
 
       - name: uploading artifact ${{ matrix.arch.name }}
